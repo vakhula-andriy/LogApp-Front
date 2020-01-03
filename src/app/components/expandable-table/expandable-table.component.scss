@@ -1,0 +1,55 @@
+.flex-table {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-elevation-z4 {
+  width: 80%;
+}
+
+table {
+  width: 100%;
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+tr.example-element-row:hover {
+  background: rgba(200, 200, 200, 0.5);
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.record-details-name, .record-details-email, .record-details-age, .record-details-time {
+  font-size: 16px;
+}
+
+.example-loading-shade {
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  overflow:hidden;
+  z-index:1;
+  background: rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-jumper {
+  text-align: right;
+  padding: 0px 12px;
+}
