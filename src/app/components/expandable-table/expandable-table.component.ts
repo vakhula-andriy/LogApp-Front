@@ -30,11 +30,12 @@ export class ExpandableTableComponent implements AfterViewInit {
     age: 0,
     timeStamp: new Date()
   };
+  pages: number[] = [];
   showDetails: EventEmitter<number>;
   isLoadingResults = true;
 
   constructor(private recordService: GetRecordsService) {
-
+    this.pages = new Array<number>();
     this.showDetails = new EventEmitter<number>();
   }
 
@@ -54,6 +55,14 @@ export class ExpandableTableComponent implements AfterViewInit {
           this.recordService.getRecordsAmount().subscribe(
             amount => {
               this.paginator.length = amount;
+              // It is the only option I found on Internet
+              // Будь ласка, не бийте
+              this.pages = [];
+              let numberOfPages = amount / this.paginator.pageSize;
+              numberOfPages = Math.ceil(numberOfPages);
+              for (let i = 0; i < numberOfPages; i++) {
+                this.pages.push(i);
+              }
             }
           );
           return data;
@@ -64,7 +73,7 @@ export class ExpandableTableComponent implements AfterViewInit {
       id => {
          this.recordService.getrecordDetails(id).subscribe(
           recordDetails => {
-            if (this.expandedRecord.id === recordDetails.id) {
+            if (this.expandedRecord.id === id) {
               this.expandedRecord.id = 0;
             } else {
               this.expandedRecord = recordDetails;

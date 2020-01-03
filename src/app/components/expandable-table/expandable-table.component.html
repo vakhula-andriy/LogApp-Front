@@ -50,5 +50,14 @@
     </table>
 
     <mat-paginator [pageSizeOptions]="[25, 50, 100]" showFirstLastButtons></mat-paginator>
+    <div class="page-jumper">
+      <mat-form-field>
+        <mat-label>Jump to page</mat-label>
+        <mat-select>
+          <mat-option (click)="changePage(page)" mat-button *ngFor="let page of pages">{{page+1}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <!-- Форма для фільтрування -->
   </div>
 </div>
