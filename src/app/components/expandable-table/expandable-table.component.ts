@@ -3,9 +3,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { map, startWith, switchMap } from 'rxjs/operators';
 
-import { GetRecordsService } from 'src/app/services/getRecord.service';
 import { RecordGeneral } from 'src/app/models/RecordGeneral.interface';
 import { RecordDetails } from 'src/app/models/RecordDetails.interface';
+import { GetRecordsService } from 'src/app/services/getRecord.service';
+import { FilterControlService } from 'src/app/services/filterControl.service';
+import { merge, Observable } from 'rxjs';
 
 
 @Component({
@@ -34,7 +36,8 @@ export class ExpandableTableComponent implements AfterViewInit {
   showDetails: EventEmitter<number>;
   isLoadingResults = true;
 
-  constructor(private recordService: GetRecordsService) {
+  constructor(private recordService: GetRecordsService,
+              private filterService: FilterControlService) {
     this.pages = new Array<number>();
     this.showDetails = new EventEmitter<number>();
   }
@@ -42,32 +45,28 @@ export class ExpandableTableComponent implements AfterViewInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   ngAfterViewInit(): void {
-    this.paginator.page
+    merge(this.paginator.page, this.filterService.filter, this.filterService.clearFilter)
       .pipe(
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
           this.recordService.setPageSize(this.paginator.pageSize);
-          return this.recordService.getRecords(this.paginator.pageIndex);
-        }),
-        map(data => {
-          this.isLoadingResults = false;
-          this.recordService.getRecordsAmount().subscribe(
-            amount => {
-              this.paginator.length = amount;
-              // It is the only option I found on Internet
-              // Будь ласка, не бийте
-              this.pages = [];
-              let numberOfPages = amount / this.paginator.pageSize;
-              numberOfPages = Math.ceil(numberOfPages);
-              for (let i = 0; i < numberOfPages; i++) {
-                this.pages.push(i);
-              }
-            }
-          );
-          return data;
+          if (this.filterService.isFiltered) {
+            return this.filter(this.filterService.from, this.filterService.to, this.filterService.field, this.paginator.pageIndex);
+          } else {
+            return this.recordService.getRecords(this.paginator.pageIndex);
+          }
         })
-      ).subscribe(data => this.records = data);
+      ).subscribe(records => {
+        this.recordService.getRecordsAmount().subscribe(
+          amount => {
+            this.paginator.length = amount;
+            this.getPagesAmount(this.paginator.getNumberOfPages());
+          }
+        );
+        this.isLoadingResults = false;
+        this.records = records;
+      });
 
     this.showDetails.subscribe(
       id => {
@@ -84,9 +83,40 @@ export class ExpandableTableComponent implements AfterViewInit {
     );
   }
 
+  filter(from: string, to: string, field: string, page: number): Observable<RecordGeneral[]> {
+    switch (field) {
+      case 'Age':
+        return this.recordService.getAgeFilteredRecords(page,
+          from ? Number(from) : null,
+          to ? Number(to) : null);
+      case 'ID':
+        return this.recordService.getIDFilteredRecords(page,
+          from ? Number(from) : null,
+          to ? Number(to) : null);
+      case 'First name':
+        return this.recordService.getNameFilteredRecords(page, from, to);
+      case 'Last name':
+        return this.recordService.getSurnameFilteredRecords(page, from, to);
+      case 'Email':
+        return this.recordService.getEmailFilteredRecords(page, from, to);
+      case 'IP-adress':
+        return this.recordService.getIPAdressFilteredRecords(page, from, to);
+      case 'Date':
+        return this.recordService.getDateFilteredRecords(page,
+          from ? new Date(from) : null,
+          to ? new Date(to) : null);
+    }
+  }
+
+  getPagesAmount(pageNumber: number) {
+    this.pages = [];
+    for (let i = 0; i < pageNumber; i++) {
+      this.pages.push(i);
+    }
+  }
+
   changePage(pageIndex: number) {
     this.paginator.pageIndex = pageIndex;
     this.paginator.page.emit();
   }
 }
-

@@ -1,0 +1,70 @@
+<button
+  mat-raised-button
+  class="filter-control-btn"
+  (click)="expanded = !expanded"
+  [color]="expanded ? 'warn' : 'primary'"
+  [innerHTML]="expanded ? 'Hide filter' : 'Show filter'">
+</button>
+
+<form
+  class="example-element-detail"
+  [@detailExpand]="expanded ? 'expanded' : 'collapsed'"
+  [formGroup]="filterForm">
+  <mat-form-field>
+    <mat-label>Filter by</mat-label>
+    <mat-select [(value)]="selected">
+      <mat-option value="ID">ID</mat-option>
+      <mat-option value="First name">First name</mat-option>
+      <mat-option value="Last name">Last name</mat-option>
+      <mat-option value="Email">Email</mat-option>
+      <mat-option value="Age">Age</mat-option>
+      <mat-option value="IP-adress">IP-adress</mat-option>
+      <mat-option value="Date">Date</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="date-picker-wrapper" *ngIf="selected === 'Date'">
+    <mat-form-field>
+      <input
+        matInput
+        [matDatepicker]="pickerFrom"
+        placeholder="From"
+        formControlName="from">
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="pickerFrom">
+      </mat-datepicker-toggle>
+      <mat-datepicker #pickerFrom></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        [matDatepicker]="pickerTo"
+        placeholder="To"
+        formControlName="to">
+      <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+      <mat-datepicker #pickerTo></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div class="filter-input-wrapper" *ngIf="selected != 'Date'">
+    <mat-form-field>
+      <input matInput placeholder="From" formControlName="from">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="To" formControlName="to">
+    </mat-form-field>
+  </div>
+
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="filterRecords()">Filter</button>
+
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="clearFilters()">Clear</button>
+</form>

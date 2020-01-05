@@ -11,19 +11,19 @@ export class GetRecordsService {
   constructor(private http: HttpClient) {
   }
 
-  public getRecords(page: number): Observable<RecordGeneral[]> {
+  getRecords(page: number): Observable<RecordGeneral[]> {
     return this.http.get<RecordGeneral[]>(
       environment.RecordApiUrl + page
     );
   }
 
-  public getrecordDetails(id: number): Observable<RecordDetails> {
+  getrecordDetails(id: number): Observable<RecordDetails> {
     return this.http.get<RecordDetails>(
       environment.RecordApiUrl + 'details/' + id
     );
   }
 
-  public getRecordsAmount(): Observable<number> {
+  getRecordsAmount(): Observable<number> {
     return this.http.get<number>(
       environment.RecordApiUrl + 'recordAmount'
     );
@@ -38,73 +38,132 @@ export class GetRecordsService {
     ).subscribe();
   }
 
-  getIDFilteredRecords(startID: number, endID: number, page: number): Observable<RecordGeneral[]> {
+  getIDFilteredRecords(page: number, startID?: number, endID?: number): Observable<RecordGeneral[]> {
+    let parameters = new HttpParams();
+    if (startID) {
+      parameters = parameters.append('minID', startID.toString());
+    }
+    if (endID) {
+      parameters = parameters.append('maxID', endID.toString());
+    }
     return this.http.get<RecordGeneral[]>(
       environment.RecordApiUrl + 'ID/' + page,
       {
-        params: new HttpParams().set('minID', startID.toString())
-                                .set('maxID', endID.toString())
+        params: parameters
       }
     );
   }
 
-  getNameFilteredRecords(startName: string, endName: string, page: number): Observable<RecordGeneral[]> {
+  getNameFilteredRecords(page: number, startName?: string, endName?: string): Observable<RecordGeneral[]> {
+    let parameters = new HttpParams();
+    if (startName) {
+      parameters = parameters.append('minName', startName);
+    }
+    if (endName) {
+      parameters = parameters.append('maxName', endName);
+    }
     return this.http.get<RecordGeneral[]>(
       environment.RecordApiUrl + 'firstName/' + page,
       {
-        params: new HttpParams().set('minName', startName)
-                                .set('maxName', endName)
+        params: parameters
       }
     );
   }
 
-  getSurnameFilteredRecords(startSurname: string, endSurname: string, page: number): Observable<RecordGeneral[]> {
+  getSurnameFilteredRecords(page: number, startSurname?: string, endSurname?: string): Observable<RecordGeneral[]> {
+    let parameters = new HttpParams();
+    if (startSurname) {
+      parameters = parameters.append('minName', startSurname);
+    }
+    if (endSurname) {
+      parameters = parameters.append('maxName', endSurname);
+    }
     return this.http.get<RecordGeneral[]>(
       environment.RecordApiUrl + 'lastName/' + page,
       {
-        params: new HttpParams().set('minName', startSurname)
-                                .set('maxName', endSurname)
+        params: parameters
       }
     );
   }
 
-  getEmailFilteredRecords(startEmail: string, endEmail: string, page: number): Observable<RecordGeneral[]> {
+  getEmailFilteredRecords(page: number, startEmail?: string, endEmail?: string): Observable<RecordGeneral[]> {
+    let parameters = new HttpParams();
+    if (startEmail) {
+      parameters = parameters.append('minEmail', startEmail);
+    }
+    if (endEmail) {
+      parameters = parameters.append('maxEmail', endEmail);
+    }
     return this.http.get<RecordGeneral[]>(
       environment.RecordApiUrl + 'email/' + page,
       {
-        params: new HttpParams().set('minEmail', startEmail)
-                                .set('maxEmail', endEmail)
+        params: parameters
       }
     );
   }
 
-  getAgeFilteredRecords(startAge: number, endAge: number, page: number): Observable<RecordGeneral[]> {
+  getAgeFilteredRecords(page: number, startAge?: number, endAge?: number): Observable<RecordGeneral[]> {
+    let parameters = new HttpParams();
+    if (startAge) {
+      parameters = parameters.append('minAge', startAge.toString());
+    }
+    if (endAge) {
+      parameters = parameters.append('maxAge', endAge.toString());
+    }
     return this.http.get<RecordGeneral[]>(
       environment.RecordApiUrl + 'age/' + page,
       {
-        params: new HttpParams().set('minAge', startAge.toString())
-                                .set('maxAge', endAge.toString())
+        params: parameters
       }
     );
   }
 
-  getIPAdressFilteredRecords(startIP: string, endIP: string, page: number): Observable<RecordGeneral[]> {
+  getIPAdressFilteredRecords(page: number, startIP?: string, endIP?: string): Observable<RecordGeneral[]> {
+    let parameters = new HttpParams();
+    if (startIP) {
+      parameters = parameters.append('minIP', startIP);
+    }
+    if (endIP) {
+      parameters = parameters.append('maxIP', endIP);
+    }
     return this.http.get<RecordGeneral[]>(
       environment.RecordApiUrl + 'IP/' + page,
       {
-        params: new HttpParams().set('minIP', startIP)
-                                .set('maxIP', endIP)
+        params: parameters
       }
     );
   }
 
-  getDateFilteredRecords(startDate: Date, endDate: Date, page: number): Observable<RecordGeneral[]> {
+  getDateFilteredRecords(page: number, startDate?: Date, endDate?: Date): Observable<RecordGeneral[]> {
+    let startDateTime: string;
+    let endDateTime: string;
+    let parameters = new HttpParams();
+    if (startDate) {
+      startDateTime = this.dateToDateTimeString(startDate);
+      parameters = parameters.append('minTime', startDateTime);
+    }
+    if (endDate) {
+      endDateTime = this.dateToDateTimeString(endDate);
+      parameters = parameters.append('maxTime', endDateTime);
+    }
     return this.http.get<RecordGeneral[]>(
       environment.RecordApiUrl + 'time/' + page,
       {
-        params: new HttpParams().set('minTime', startDate.toString())
-                                .set('maxTime', endDate.toString())
+        params: parameters
       }
     );
+  }
+
+  dateToDateTimeString(date: Date): string {
+    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() +
+    'T' + this.twoDigitNumber(date.getHours()) + ':' + this.twoDigitNumber(date.getMinutes()) +
+    ':' + this.twoDigitNumber(date.getSeconds()) + date.getTimezoneOffset();
+  }
+
+  twoDigitNumber(num: number): string {
+    if (num < 10) {
+      return '0' + num;
+    }
+    return num.toString();
   }
 }

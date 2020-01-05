@@ -8,12 +8,15 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MaterialModule } from './material.module';
 import { AppComponent } from './components/app/app.component';
 import { ExpandableTableComponent } from './components/expandable-table/expandable-table.component';
+import { FilterFormComponent } from './components/filter-form/filter-form.component';
 import { GetRecordsService } from './services/getRecord.service';
+import { FilterControlService } from './services/filterControl.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ExpandableTableComponent
+    ExpandableTableComponent,
+    FilterFormComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +28,8 @@ import { GetRecordsService } from './services/getRecord.service';
     ReactiveFormsModule,
   ],
   providers: [
-    GetRecordsService
+    GetRecordsService,
+    FilterControlService
   ],
   bootstrap: [AppComponent]
 })

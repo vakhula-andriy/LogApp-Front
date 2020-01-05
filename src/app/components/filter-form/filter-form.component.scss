@@ -1,0 +1,16 @@
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.filter-control-btn {
+  margin: 12px;
+}
+
+.date-picker-wrapper, .filter-input-wrapper {
+  width: 40%;
+  display: flex;
+  justify-content: space-between;
+}
