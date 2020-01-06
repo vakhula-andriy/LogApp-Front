@@ -11,6 +11,7 @@ import { ExpandableTableComponent } from './components/expandable-table/expandab
 import { FilterFormComponent } from './components/filter-form/filter-form.component';
 import { GetRecordsService } from './services/getRecord.service';
 import { FilterControlService } from './services/filterControl.service';
+import { RefreshTableService } from './services/refreshTable.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { FilterControlService } from './services/filterControl.service';
   ],
   providers: [
     GetRecordsService,
-    FilterControlService
+    FilterControlService,
+    RefreshTableService
   ],
   bootstrap: [AppComponent]
 })

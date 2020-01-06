@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 import { FilterControlService } from 'src/app/services/filterControl.service';
+import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -32,6 +33,8 @@ export class FilterFormComponent implements OnInit {
   }
 
   onSelectChange() {
+    this.filterForm.get('from').clearValidators();
+    this.filterForm.get('to').clearValidators();
     switch (this.selected) {
       case 'Age':
       case 'ID':
@@ -51,11 +54,9 @@ export class FilterFormComponent implements OnInit {
         this.filterForm.get('from').setValidators(Validators.pattern('^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$'));
         this.filterForm.get('to').setValidators(Validators.pattern('^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$'));
         break;
-      case 'Date':
-        this.filterForm.get('from').setValidators(Validators.pattern('^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$'));
-        this.filterForm.get('to').setValidators(Validators.pattern('^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$'));
-        break;
     }
+    this.filterForm.get('from').updateValueAndValidity();
+    this.filterForm.get('to').updateValueAndValidity();
   }
 
   filterRecords() {

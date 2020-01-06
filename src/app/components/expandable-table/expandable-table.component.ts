@@ -8,6 +8,7 @@ import { RecordDetails } from 'src/app/models/RecordDetails.interface';
 import { GetRecordsService } from 'src/app/services/getRecord.service';
 import { FilterControlService } from 'src/app/services/filterControl.service';
 import { merge, Observable } from 'rxjs';
+import { RefreshTableService } from 'src/app/services/refreshTable.service';
 
 
 @Component({
@@ -36,8 +37,9 @@ export class ExpandableTableComponent implements AfterViewInit {
   showDetails: EventEmitter<number>;
   isLoadingResults = true;
 
-  constructor(private recordService: GetRecordsService,
-              private filterService: FilterControlService) {
+  constructor(private _recordService: GetRecordsService,
+              private _filterService: FilterControlService,
+              private _refreshService: RefreshTableService) {
     this.pages = new Array<number>();
     this.showDetails = new EventEmitter<number>();
   }
@@ -45,20 +47,20 @@ export class ExpandableTableComponent implements AfterViewInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   ngAfterViewInit(): void {
-    merge(this.paginator.page, this.filterService.filter, this.filterService.clearFilter)
+    merge(this.paginator.page, this._filterService.filter, this._filterService.clearFilter, this._refreshService.refreshRecords)
       .pipe(
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          this.recordService.setPageSize(this.paginator.pageSize);
-          if (this.filterService.isFiltered) {
-            return this.filter(this.filterService.from, this.filterService.to, this.filterService.field, this.paginator.pageIndex);
+          this._recordService.setPageSize(this.paginator.pageSize);
+          if (this._filterService.isFiltered) {
+            return this.filter(this._filterService.from, this._filterService.to, this._filterService.field, this.paginator.pageIndex);
           } else {
-            return this.recordService.getRecords(this.paginator.pageIndex);
+            return this._recordService.getRecords(this.paginator.pageIndex);
           }
         })
       ).subscribe(records => {
-        this.recordService.getRecordsAmount().subscribe(
+        this._recordService.getRecordsAmount().subscribe(
           amount => {
             this.paginator.length = amount;
             this.getPagesAmount(this.paginator.getNumberOfPages());
@@ -70,7 +72,7 @@ export class ExpandableTableComponent implements AfterViewInit {
 
     this.showDetails.subscribe(
       id => {
-         this.recordService.getrecordDetails(id).subscribe(
+         this._recordService.getrecordDetails(id).subscribe(
           recordDetails => {
             if (this.expandedRecord.id === id) {
               this.expandedRecord.id = 0;
@@ -86,23 +88,23 @@ export class ExpandableTableComponent implements AfterViewInit {
   filter(from: string, to: string, field: string, page: number): Observable<RecordGeneral[]> {
     switch (field) {
       case 'Age':
-        return this.recordService.getAgeFilteredRecords(page,
+        return this._recordService.getAgeFilteredRecords(page,
           from ? Number(from) : null,
           to ? Number(to) : null);
       case 'ID':
-        return this.recordService.getIDFilteredRecords(page,
+        return this._recordService.getIDFilteredRecords(page,
           from ? Number(from) : null,
           to ? Number(to) : null);
       case 'First name':
-        return this.recordService.getNameFilteredRecords(page, from, to);
+        return this._recordService.getNameFilteredRecords(page, from, to);
       case 'Last name':
-        return this.recordService.getSurnameFilteredRecords(page, from, to);
+        return this._recordService.getSurnameFilteredRecords(page, from, to);
       case 'Email':
-        return this.recordService.getEmailFilteredRecords(page, from, to);
+        return this._recordService.getEmailFilteredRecords(page, from, to);
       case 'IP-adress':
-        return this.recordService.getIPAdressFilteredRecords(page, from, to);
+        return this._recordService.getIPAdressFilteredRecords(page, from, to);
       case 'Date':
-        return this.recordService.getDateFilteredRecords(page,
+        return this._recordService.getDateFilteredRecords(page,
           from ? new Date(from) : null,
           to ? new Date(to) : null);
     }

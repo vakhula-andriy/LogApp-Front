@@ -12,7 +12,9 @@
   [formGroup]="filterForm">
   <mat-form-field>
     <mat-label>Filter by</mat-label>
-    <mat-select [(value)]="selected">
+    <mat-select
+      [(value)]="selected"
+      (selectionChange)="onSelectChange()">
       <mat-option value="ID">ID</mat-option>
       <mat-option value="First name">First name</mat-option>
       <mat-option value="Last name">Last name</mat-option>
@@ -61,6 +63,7 @@
   <button
     mat-raised-button
     color="primary"
+    [disabled]="!filterForm.valid"
     (click)="filterRecords()">Filter</button>
 
   <button
