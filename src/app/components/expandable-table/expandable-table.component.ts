@@ -1,13 +1,13 @@
 import { Component, ViewChild, AfterViewInit, EventEmitter } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { map, startWith, switchMap } from 'rxjs/operators';
+import { merge, Observable } from 'rxjs';
+import { startWith, switchMap } from 'rxjs/operators';
 
 import { RecordGeneral } from 'src/app/models/RecordGeneral.interface';
 import { RecordDetails } from 'src/app/models/RecordDetails.interface';
 import { GetRecordsService } from 'src/app/services/getRecord.service';
 import { FilterControlService } from 'src/app/services/filterControl.service';
-import { merge, Observable } from 'rxjs';
 import { RefreshTableService } from 'src/app/services/refreshTable.service';
 
 

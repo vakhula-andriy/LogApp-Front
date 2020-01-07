@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { RefreshTableService } from 'src/app/services/refreshTable.service';
 
 
@@ -11,7 +12,7 @@ import { RefreshTableService } from 'src/app/services/refreshTable.service';
 })
 export class AppComponent implements OnInit {
   private _hubConnection: HubConnection;
-  title = 'LogApp';
+  title = 'LogApp Dashboard';
 
   constructor(private _snackBar: MatSnackBar, private _refreshService: RefreshTableService) {
   }

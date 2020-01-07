@@ -3,7 +3,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 import { FilterControlService } from 'src/app/services/filterControl.service';
-import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -23,7 +22,7 @@ export class FilterFormComponent implements OnInit {
   expanded = false;
   selected: string;
 
-  constructor(private filterService: FilterControlService) { }
+  constructor(private _filterService: FilterControlService) { }
 
   ngOnInit() {
     this.filterForm = new FormGroup({
@@ -60,16 +59,16 @@ export class FilterFormComponent implements OnInit {
   }
 
   filterRecords() {
-    this.filterService.from = this.filterForm.get('from').value;
-    this.filterService.to = this.filterForm.get('to').value;
-    this.filterService.field = this.selected;
-    this.filterService.isFiltered = true;
-    this.filterService.filter.emit();
+    this._filterService.from = this.filterForm.get('from').value;
+    this._filterService.to = this.filterForm.get('to').value;
+    this._filterService.field = this.selected;
+    this._filterService.isFiltered = true;
+    this._filterService.filter.emit();
   }
 
   clearFilters() {
     this.filterForm.reset();
-    this.filterService.isFiltered = false;
-    this.filterService.clearFilter.emit();
+    this._filterService.isFiltered = false;
+    this._filterService.clearFilter.emit();
   }
 }

@@ -12,19 +12,19 @@ table {
   width: 100%;
 }
 
-tr.example-detail-row {
+tr.detail-row {
   height: 0;
 }
 
-tr.example-element-row:hover {
+tr.element-row:hover {
   background: rgba(200, 200, 200, 0.5);
 }
 
-.example-element-row td {
+.element-row td {
   border-bottom-width: 0;
 }
 
-.example-element-detail {
+.record-detail {
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -35,7 +35,7 @@ tr.example-element-row:hover {
   font-size: 16px;
 }
 
-.example-loading-shade {
+.loading-shade {
   position:absolute;
   top:0;
   bottom:0;
