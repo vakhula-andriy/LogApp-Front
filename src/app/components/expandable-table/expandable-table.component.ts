@@ -1,5 +1,6 @@
 import { Component, ViewChild, AfterViewInit, EventEmitter } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { merge, Observable } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
@@ -39,7 +40,8 @@ export class ExpandableTableComponent implements AfterViewInit {
 
   constructor(private _recordService: GetRecordsService,
               private _filterService: FilterControlService,
-              private _refreshService: RefreshTableService) {
+              private _refreshService: RefreshTableService,
+              private _snackBar: MatSnackBar) {
     this.pages = new Array<number>();
     this.showDetails = new EventEmitter<number>();
   }
@@ -64,11 +66,19 @@ export class ExpandableTableComponent implements AfterViewInit {
           amount => {
             this.paginator.length = amount;
             this.getPagesAmount(this.paginator.getNumberOfPages());
+          },
+          err => {
+            this.isLoadingResults = false;
+            this._snackBar.open('Error with loading ocured, please, try again');
           }
         );
         this.isLoadingResults = false;
         this.records = records;
-      });
+      },
+        err => {
+          this.isLoadingResults = false;
+          this._snackBar.open('Error with loading ocured, please, try again');
+        });
 
     this.showDetails.subscribe(
       id => {
@@ -79,6 +89,10 @@ export class ExpandableTableComponent implements AfterViewInit {
             } else {
               this.expandedRecord = recordDetails;
             }
+          },
+          err => {
+            this.isLoadingResults = false;
+            this._snackBar.open('Error with loading ocured, please, try again');
           }
         );
       }
