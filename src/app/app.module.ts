@@ -9,9 +9,6 @@ import { MaterialModule } from './material.module';
 import { AppComponent } from './components/app/app.component';
 import { ExpandableTableComponent } from './components/expandable-table/expandable-table.component';
 import { FilterFormComponent } from './components/filter-form/filter-form.component';
-import { GetRecordsService } from './services/getRecord.service';
-import { FilterControlService } from './services/filterControl.service';
-import { RefreshTableService } from './services/refreshTable.service';
 
 @NgModule({
   declarations: [
@@ -28,11 +25,7 @@ import { RefreshTableService } from './services/refreshTable.service';
     MatNativeDateModule,
     ReactiveFormsModule,
   ],
-  providers: [
-    GetRecordsService,
-    FilterControlService,
-    RefreshTableService
-  ],
+  providers: [ ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

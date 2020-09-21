@@ -1,6 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class FilterControlService {
   filter = new EventEmitter();
   clearFilter = new EventEmitter();
@@ -8,4 +10,5 @@ export class FilterControlService {
   field: string;
   from?: string;
   to?: string;
+  searchValue?: string;
 }

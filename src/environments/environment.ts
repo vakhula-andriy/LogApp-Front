@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  RecordApiUrl: 'https://localhost:5001/'
+  recordApiUrl: 'https://localhost:5001/',
+  newRecordsNotify: 'https://localhost:5001/notifyNewRecords',
+  notifyMethodHubName: 'RecordsAdded'
 };
 
 /*

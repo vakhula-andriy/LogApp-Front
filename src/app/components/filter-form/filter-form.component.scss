@@ -1,16 +1,17 @@
-.example-element-detail {
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.filter-control-btn {
+.filter-visibility-btn {
   margin: 12px;
 }
 
-.date-picker-wrapper, .filter-input-wrapper {
-  width: 40%;
+.filter-form {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: space-around;
+  overflow: hidden;
+
+  .date-picker-wrapper,
+  .filter-input-wrapper {
+    width: 40%;
+    display: flex;
+    justify-content: space-between;
+  }
 }

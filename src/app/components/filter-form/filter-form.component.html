@@ -1,13 +1,13 @@
 <button
   mat-raised-button
-  class="filter-control-btn"
+  class="filter-visibility-btn"
   (click)="expanded = !expanded"
   [color]="expanded ? 'warn' : 'primary'"
   [innerHTML]="expanded ? 'Hide filter' : 'Show filter'">
 </button>
 
 <form
-  class="example-element-detail"
+  class="filter-form"
   [@detailExpand]="expanded ? 'expanded' : 'collapsed'"
   [formGroup]="filterForm">
   <mat-form-field>
@@ -16,16 +16,16 @@
       [(value)]="selected"
       (selectionChange)="onSelectChange()">
       <mat-option value="ID">ID</mat-option>
-      <mat-option value="First name">First name</mat-option>
-      <mat-option value="Last name">Last name</mat-option>
-      <mat-option value="Email">Email</mat-option>
-      <mat-option value="Age">Age</mat-option>
-      <mat-option value="IP-adress">IP-adress</mat-option>
-      <mat-option value="Date">Date</mat-option>
+      <mat-option value="firstName">First name</mat-option>
+      <mat-option value="lastName">Last name</mat-option>
+      <mat-option value="email">Email</mat-option>
+      <mat-option value="age">Age</mat-option>
+      <mat-option value="IP">IP-adress</mat-option>
+      <mat-option value="time">Date</mat-option>
     </mat-select>
   </mat-form-field>
 
-  <div class="date-picker-wrapper" *ngIf="selected === 'Date'">
+  <div class="date-picker-wrapper" *ngIf="selected === 'time'">
     <mat-form-field>
       <input
         matInput
@@ -50,14 +50,20 @@
     </mat-form-field>
   </div>
 
-  <div class="filter-input-wrapper" *ngIf="selected != 'Date'">
-    <mat-form-field>
-      <input matInput placeholder="From" formControlName="from">
+  <div class="filter-input-wrapper" *ngIf="selected != 'time'">
+    <mat-form-field *ngIf="selected == 'firstName' || selected == 'lastName' || selected == 'email'; else filterFields">
+      <input matInput placeholder="Search" formControlName="searchValue">
     </mat-form-field>
 
-    <mat-form-field>
-      <input matInput placeholder="To" formControlName="to">
-    </mat-form-field>
+    <ng-template #filterFields>
+      <mat-form-field>
+        <input matInput placeholder="From" formControlName="from">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="To" formControlName="to">
+      </mat-form-field>
+    </ng-template>
   </div>
 
   <button

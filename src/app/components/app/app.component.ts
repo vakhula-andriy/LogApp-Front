@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { RefreshTableService } from 'src/app/services/refreshTable.service';
+import { RefreshTableService } from 'src/app/services/refresh-table.service';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -11,27 +12,27 @@ import { RefreshTableService } from 'src/app/services/refreshTable.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  private _hubConnection: HubConnection;
+  private hubConnection: HubConnection;
   title = 'LogApp Dashboard';
 
-  constructor(private _snackBar: MatSnackBar, private _refreshService: RefreshTableService) {
+  constructor(private snackBar: MatSnackBar, private refreshService: RefreshTableService) {
   }
 
   ngOnInit() {
     const builder = new HubConnectionBuilder();
-    this._hubConnection = builder.withUrl('https://localhost:5001/notifyNewRecords').build();
-    this._hubConnection
+    this.hubConnection = builder.withUrl(environment.newRecordsNotify).build();
+    this.hubConnection
       .start()
       .then(() => console.log('Connection started!'))
       .catch(err => console.log('Error while establishing connection :('));
 
-    this._hubConnection.on('RecordsAdded', (amount: number) => {
-      this._snackBar.open(amount + ' new records has been added', 'Refresh', {
+    this.hubConnection.on(environment.notifyMethodHubName, (amount: number) => {
+      this.snackBar.open(amount + ' new records has been added', 'Refresh', {
         duration: 10000
       }).onAction()
       .subscribe(
         () => {
-          this._refreshService.refreshRecords.emit();
+          this.refreshService.refreshRecords.emit();
         }
       );
     });
